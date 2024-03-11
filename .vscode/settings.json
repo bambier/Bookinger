@@ -1,0 +1,16 @@
+{
+  "python.analysis.autoImportCompletions": true,
+  "mypy-type-checker.args": ["ignore_missing_imports=True"],
+  "git.enableSmartCommit": true,
+  "git.enabled": true,
+  "django.i18n": true,
+  "files.associations": {
+    "*.env.development": "env",
+    "*.env.production": "env",
+    "*.env.sample": "env",
+    "*.env": "env",
+    ".env": "env"
+  },
+  "python.analysis.extraPaths": ["${workspaceFolder}/backend"],
+  "python.autoComplete.extraPaths": ["${workspaceFolder}/backend"]
+}

@@ -1,0 +1,39 @@
+{
+  "recommendations": [
+    "piotrpalarz.vscode-gitignore-generator",
+    "njpwerner.autodocstring",
+    "ms-python.autopep8",
+    "naumovs.color-highlight",
+    "anseki.vscode-color",
+    "batisteo.vscode-django",
+    "mikestead.dotenv",
+    "irongeek.vscode-env",
+    "visualstudioexptteam.vscodeintellicode",
+    "visualstudioexptteam.intellicode-api-usage-examples",
+    "ms-python.isort",
+    "wholroyd.jinja",
+    "sumitsaha.learn-with-sumit-theme",
+    "davidanson.vscode-markdownlint",
+    "pkief.material-icon-theme",
+    "ms-python.mypy-type-checker",
+    "esbenp.prettier-vscode",
+    "ms-python.vscode-pylance",
+    "ms-python.debugpy",
+    "donjayamanne.python-environment-manager",
+    "donjayamanne.python-extension-pack",
+    "kevinrose.vsc-python-indent",
+    "mgesbert.python-path"
+  ],
+  "unwantedRecommendations": [
+    "donjayamanne.githistory",
+    "felipecaputo.git-project-manager",
+    "eamodio.gitlens",
+    "ms-edgedevtools.vscode-edge-devtools",
+    "GitHub.copilot",
+    "firefox-devtools.vscode-firefox-debug",
+    "dbaeumer.vscode-eslint",
+    "vscodevim.vim",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "GoogleCloudTools.cloudcode"
+  ]
+}
