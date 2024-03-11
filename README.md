@@ -1,4 +1,4 @@
-# Bookinger Project README
+# Bookinger Project
 
 Welcome to the Bookinger project! This is a Django-based backend application specifically designed for booking time slots at a barbershop. The project is neatly organized into several directories, each serving a unique purpose in the application.
 
