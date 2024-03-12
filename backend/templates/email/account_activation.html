@@ -1,0 +1,67 @@
+{% load i18n static %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="{% translate "Account Activation" %}" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% translate "Account Activation" %}
+    </title>
+    <link
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        outline: 0;
+      }
+      body,
+      html {
+        height: 100%;
+        width: 100%;
+        background-color: #0b0633;
+        color: #fff;
+        font-family: "Sahel", "Times New Roman", Times, serif;
+        text-align: center;
+        justify-content: center;
+        justify-self: center;
+        justify-items: center;
+        align-items: center;
+        align-self: center;
+        align-content: center;
+        text-decoration: none;
+      }
+      a {
+        color: #fff;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    {% autoescape off %}
+    <main style="padding: 10px 300px">
+      <h1> {% translate "Account Activation Email" %} </h1>
+      <b>
+        {% translate "Hello" %} {{ username }}
+      </b>
+      <p>
+        {% translate "This email has been sent to you because we have received a request for your registration on the site. If you have registered this request, click on the link below to activate your account. If this request is not from you, ignore this email." %}
+      </p>
+      <a href="https://example.com/activate/{{uid}}/{{token}}/">
+        <strong>{% translate "Activation Link" %} : </strong>
+        https://example.com/activate/?uid={{uid}}&token={{token}}/
+      </a>
+    </main>
+
+    {% endautoescape %}
+  </body>
+</html>
