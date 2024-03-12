@@ -29,28 +29,28 @@ jobs:
         run: |
           cd backend
           python manage.py test
-        # env:
-        #   PROJECT_NAME: ""
-        #   SECRET_KEY: "django-insecure-ghzs+ek*=ajkk*mkc8c3jc#o)hvqv@+nhxos7=2l5i7-qm0dcb"
-        #   DEBUG: True
-        #   ALLOWED_HOSTS: "*"
-        #   EMAIL_HOST: ""
-        #   EMAIL_USE_SSL: True
-        #   EMAIL_PORT: ""
-        #   EMAIL_HOST_USER: ""
-        #   EMAIL_HOST_PASSWORD: ""
-        #   DEFAULT_FROM_EMAIL: ""
-        #   ADMINS: ""
-        #   DB_USER: "example"
-        #   DB_NAME: "example"
-        #   DB_PASSWORD: "example"
-        #   DB_HOST: "db"
-        #   DB_PORT: "5432"
-        #   DB: "sqlite3"
-        #   TEST_DB_USER: "test"
-        #   TEST_DB_PASSWORD: "test"
-        #   TEST_DB_NAME: "test"
-        #   TEST_DB_HOST: "db"
-        #   TEST_DB_PORT: "5432"
-        #   SIGNING_KEY: ""
-        #   TELEGRAM_BOT_TOKEN: ""
+        env:
+          PROJECT_NAME: ""
+          SECRET_KEY: "django-insecure-ghzs+ek*=ajkk*mkc8c3jc#o)hvqv@+nhxos7=2l5i7-qm0dcb"
+          DEBUG: True
+          ALLOWED_HOSTS: "*"
+          EMAIL_HOST: ""
+          EMAIL_USE_SSL: True
+          EMAIL_PORT: ""
+          EMAIL_HOST_USER: ""
+          EMAIL_HOST_PASSWORD: ""
+          DEFAULT_FROM_EMAIL: ""
+          ADMINS: ""
+          DB_USER: "example"
+          DB_NAME: "example"
+          DB_PASSWORD: "example"
+          DB_HOST: "db"
+          DB_PORT: "5432"
+          DB: "sqlite3"
+          TEST_DB_USER: "test"
+          TEST_DB_PASSWORD: "test"
+          TEST_DB_NAME: "test"
+          TEST_DB_HOST: "db"
+          TEST_DB_PORT: "5432"
+          SIGNING_KEY: ""
+          TELEGRAM_BOT_TOKEN: ""
