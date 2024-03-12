@@ -91,18 +91,18 @@ Let's add a bit of imagination to the project. How about a feature called "Booki
 
 Here's a potential to-do list for implementing the above idea and other tasks:
 
-1. **Research AR Libraries**: Look into AR libraries that can be integrated with React Native for the mobile app.
+1. [ ] **Research AR Libraries**: Look into AR libraries that can be integrated with React Native for the mobile app.
 
-2. **Design AR Interface**: Design the user interface for the AR feature. This includes the viewing screen, navigation buttons, and informational overlays.
+2. [ ] **Design AR Interface**: Design the user interface for the AR feature. This includes the viewing screen, navigation buttons, and informational overlays.
 
-3. **Implement AR Feature**: Write the code to implement the AR feature in the mobile app. This includes capturing and processing the AR data, rendering the AR view, and handling user interactions.
+3. [ ] **Implement AR Feature**: Write the code to implement the AR feature in the mobile app. This includes capturing and processing the AR data, rendering the AR view, and handling user interactions.
 
-4. **Test AR Feature**: Thoroughly test the AR feature on various devices and under different conditions to ensure it works properly and provides a good user experience.
+4. [ ] **Test AR Feature**: Thoroughly test the AR feature on various devices and under different conditions to ensure it works properly and provides a good user experience.
 
-5. **Create Django Superuser**: Use the `createsuperuser` command to create a new superuser for the Django admin interface.
+5. [ ] **Create Django Superuser**: Use the `createsuperuser` command to create a new superuser for the Django admin interface.
 
-6. **Run Django Tests**: Use the `test` command to run all Django tests and ensure there are no regressions.
+6. [ ] **Run Django Tests**: Use the `test` command to run all Django tests and ensure there are no regressions.
 
-7. **Compile Website Client**: Use the `npm run build` command to compile the React client for the website.
+7. [ ] **Compile Website Client**: Use the `npm run build` command to compile the React client for the website.
 
-8. **Compile Android Client**: Follow the official React Native instructions to create a release build for the Android client.
+8. [ ] **Compile Android Client**: Follow the official React Native instructions to create a release build for the Android client.
