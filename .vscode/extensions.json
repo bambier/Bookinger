@@ -4,7 +4,6 @@
     "njpwerner.autodocstring",
     "ms-python.autopep8",
     "naumovs.color-highlight",
-    "anseki.vscode-color",
     "batisteo.vscode-django",
     "mikestead.dotenv",
     "irongeek.vscode-env",
@@ -23,17 +22,5 @@
     "donjayamanne.python-extension-pack",
     "kevinrose.vsc-python-indent",
     "mgesbert.python-path"
-  ],
-  "unwantedRecommendations": [
-    "donjayamanne.githistory",
-    "felipecaputo.git-project-manager",
-    "eamodio.gitlens",
-    "ms-edgedevtools.vscode-edge-devtools",
-    "GitHub.copilot",
-    "firefox-devtools.vscode-firefox-debug",
-    "dbaeumer.vscode-eslint",
-    "vscodevim.vim",
-    "ms-kubernetes-tools.vscode-kubernetes-tools",
-    "GoogleCloudTools.cloudcode"
   ]
 }
