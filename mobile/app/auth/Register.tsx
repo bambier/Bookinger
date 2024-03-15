@@ -37,6 +37,7 @@ export default function Register() {
       });
   }, []);
 
+  // FIXME: Fix URL and data
   function Submit(event: GestureResponderEvent) {
     event.preventDefault();
     setDisabledBtn(true);
