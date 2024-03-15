@@ -6,13 +6,11 @@
     "naumovs.color-highlight",
     "batisteo.vscode-django",
     "mikestead.dotenv",
-    "irongeek.vscode-env",
     "visualstudioexptteam.vscodeintellicode",
     "visualstudioexptteam.intellicode-api-usage-examples",
     "ms-python.isort",
     "wholroyd.jinja",
     "sumitsaha.learn-with-sumit-theme",
-    "davidanson.vscode-markdownlint",
     "pkief.material-icon-theme",
     "ms-python.mypy-type-checker",
     "esbenp.prettier-vscode",
@@ -21,6 +19,15 @@
     "donjayamanne.python-environment-manager",
     "donjayamanne.python-extension-pack",
     "kevinrose.vsc-python-indent",
-    "mgesbert.python-path"
+    "mgesbert.python-path",
+    "ms-vscode.vscode-typescript-next",
+    "antiantisepticeye.vscode-color-picker",
+    "gruntfuggly.todo-tree",
+    "naumovs.theme-oceanicnext",
+    "msjsdiag.vscode-react-native",
+    "formulahendry.auto-rename-tag",
+    "steoates.autoimport",
+    "formulahendry.auto-complete-tag",
+    "formulahendry.auto-close-tag"
   ]
 }
