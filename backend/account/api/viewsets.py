@@ -9,7 +9,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
-from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
@@ -58,7 +57,8 @@ class UserViewSet(ModelViewSet):
     @action(methods=['GET',], detail=False)
     def profile(self, request, *args, **kwargs):
         data = self.get_serializer(request.user)
-        return Response(data.data, status=status.HTTP_200_OK)
+        headers = self.get_success_headers()
+        return Response(data.data, status=status.HTTP_200_OK, headers=headers)
 
     def partial_update(self, request, *args, **kwargs):
         request.data._mutable = True
@@ -109,7 +109,8 @@ class UserViewSet(ModelViewSet):
             mail_subject, message, to=[email]
         )
         email.send()
-        return Response(data={'message': _('Account created. Check your email to activate it.')}, status=status.HTTP_201_CREATED)
+        headers = self.get_success_headers()
+        return Response(data={'message': _('Account created. Check your email to activate it.')}, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(methods=['POST'], detail=False)
     def activate(self, request):
@@ -123,7 +124,8 @@ class UserViewSet(ModelViewSet):
             if (TokenGenerator().check_token(user, token)):
                 user.is_active = True
                 user.save()
-                return Response(data={'msg': _('Activated')}, status=status.HTTP_200_OK)
+                headers = self.get_success_headers()
+                return Response(data={'msg': _('Activated')}, status=status.HTTP_200_OK, headers=headers)
         except:
             pass
 

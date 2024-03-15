@@ -1,5 +1,4 @@
 {
-  "editor.fontSize": 16,
   "python.analysis.autoImportCompletions": true,
   "mypy-type-checker.args": ["ignore_missing_imports=True"],
   "git.enableSmartCommit": true,

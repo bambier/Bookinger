@@ -1,7 +1,8 @@
 import axios from "axios";
+import urls from "@/constants/urls";
 
 const requests = axios.create({
-  baseURL: "192.168.126.199:8000",
+  baseURL: urls.baseURL,
   headers: {
     "Content-Type": "application/json",
     ContentType: "application/json",

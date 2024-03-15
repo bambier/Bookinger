@@ -21,7 +21,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000"
-      }
+      },
+      "package": "com.bookinger.reserve",
+      "versionCode": 1
     }
   }
 }

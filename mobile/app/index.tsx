@@ -8,10 +8,10 @@ export default function index() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem("access-token")
+    AsyncStorage.getItem("refresh-token")
       .then((value) => {
         if (value === null) {
-          router.replace("Login");
+          router.replace("/auth/Login");
         }
       })
       .catch((error) => {
@@ -25,7 +25,7 @@ export default function index() {
   return isLoaded ? (
     <View>
       <Text>سلام عزیزم عزیم سلام</Text>
-      <Button>رو من کلیک کن</Button>
+      <Button onPress={(e) => AsyncStorage.clear()}>رو من کلیک کن</Button>
     </View>
   ) : null;
 }

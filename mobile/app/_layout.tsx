@@ -7,14 +7,23 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { I18nManager } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { I18nManager } from "react-native";
 
 I18nManager.forceRTL(true);
 
 // Catch any errors thrown by the Layout component.
 export { ErrorBoundary } from "expo-router";
+
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "index",
+
+  auth: {
+    initialRouteName: "Login",
+  },
+};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -45,7 +54,7 @@ export default function RootLayout() {
       <PaperProvider theme={Theme[colorScheme].md}>
         <SafeAreaView style={{ flex: 1, margin: 0, padding: 0 }}>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" />
+            <Stack.Screen name="auth" />
           </Stack>
         </SafeAreaView>
         <StatusBar
