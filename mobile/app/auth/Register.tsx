@@ -146,7 +146,11 @@ export default function Register() {
             disabled={disabledBtn || username.length < 4 || password.length < 8}
             loading={disabledBtn}
           >
-            ورود
+            ساخت حساب کاربری جدید
+          </Button>
+
+          <Button style={styles.btn} onPress={(e) => router.back()}>
+            ورود به حساب کاربری
           </Button>
         </Card.Content>
       </Card>
