@@ -7,8 +7,8 @@ export default function jwt_decode(raw_token: string) {
       signature: token[2],
     };
   } catch {
-    console.log("Token Is Invalid");
-    console.log("You are not hacker but we are!");
+    console.error("Token Is Invalid.");
+    console.info("You are not hacker but we are!");
     return {
       header: null,
       payload: {},

@@ -3,7 +3,7 @@ import requests from "@/utils/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosError, AxiosResponse } from "axios";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import {
   GestureResponderEvent,
   Image,
@@ -11,15 +11,47 @@ import {
   ToastAndroid,
   View,
 } from "react-native";
-import { Button, Card, Text, TextInput } from "react-native-paper";
+import { Button, Card, Icon, Text, TextInput } from "react-native-paper";
 
+// Codes
+
+// Reducer for state
+function reducer(
+  state: any,
+  action: { key: string; value_key: string; value: string }
+) {
+  return {
+    ...state,
+    [action.key]: {
+      ...state[action.key],
+      [action.value_key]: action.value,
+    },
+  };
+}
+
+const ICON_SIZE = 23;
+
+// Main Componetnt View
 export default function Register() {
+  const [state, dispatch] = useReducer(reducer, {
+    username: {
+      value: "",
+      error: false,
+    },
+    password: {
+      value: "",
+      error: false,
+    },
+    password_reapeat: {
+      value: "",
+    },
+    email: {
+      value: "",
+      error: false,
+    },
+  });
   const [isLoaded, setIsLoaded] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [usernameError, setUsernameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
   const [disabledBtn, setDisabledBtn] = useState(false);
 
   useEffect(() => {
@@ -41,28 +73,19 @@ export default function Register() {
   function Submit(event: GestureResponderEvent) {
     event.preventDefault();
     setDisabledBtn(true);
-    if (password.length < 8) {
-      setPasswordError(true);
+    if (state.password.value.length < 8) {
+      dispatch({ key: "password", value_key: "error", value: true });
     }
-    if (username.length < 4) {
-      setUsernameError(true);
+    if (state.username.value.length < 4) {
+      dispatch({ key: "username", value_key: "error", value: true });
     }
 
-    if (password.length >= 8 && username.length >= 4) {
+    if (state.password.length >= 8 && state.username.length >= 4) {
       requests
-        .post(
-          urls.account.user.login,
-          {
-            username: username,
-            password: password,
-          },
-          {
-            headers: {
-              "Accept-Language": "fa-ir",
-            },
-            timeout: 2000,
-          }
-        )
+        .post(urls.account.user.login, {
+          username: state.username,
+          password: state.password,
+        })
         .then((response: AxiosResponse) => {
           if (response.status === 200 && typeof response.data === "object") {
             // logged in
@@ -110,41 +133,106 @@ export default function Register() {
           </Text>
 
           {/* Username input */}
-          <TextInput
-            mode="outlined"
-            style={styles.textInput}
-            label="نام کاربری"
-            autoFocus={false}
-            value={username}
-            onChangeText={(text) => setUsername(text)}
-            error={usernameError}
-          />
+          <View style={styles.inputContainer}>
+            <Icon source="account" size={ICON_SIZE} />
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="نام کاربری"
+              value={state.username.value}
+              onChangeText={(text) =>
+                dispatch({ key: "username", value_key: "value", value: text })
+              }
+              error={state.username.error}
+              returnKeyType="next"
+            />
+          </View>
 
           {/* Password input */}
-          <TextInput
-            mode="outlined"
-            style={styles.textInput}
-            label="گذرواژه"
-            autoFocus={false}
-            // If `showPassword=false` => secure else NOT secure
-            secureTextEntry={!showPassword}
-            right={
-              <TextInput.Icon
-                icon="eye"
-                onPress={() => setShowPassword((value) => !value)}
-              />
-            }
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            error={passwordError}
-          />
+          <View style={styles.inputContainer}>
+            <Icon source="form-textbox-password" size={ICON_SIZE} />
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="گذرواژه"
+              // If `showPassword=false` => secure else NOT secure
+              secureTextEntry={!showPassword}
+              value={state.password.value}
+              onChangeText={(text) =>
+                dispatch({ key: "password", value_key: "value", value: text })
+              }
+              error={state.password.error}
+              keyboardType={showPassword ? "visible-password" : "default"}
+              returnKeyType="next"
+              right={
+                <TextInput.Icon
+                  icon="eye"
+                  onPress={() => setShowPassword((value) => !value)}
+                />
+              }
+            />
+          </View>
+
+          {/* Password repeat input */}
+          <View style={styles.inputContainer}>
+            <Icon source="repeat" size={ICON_SIZE} />
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="تکرار گذرواژه"
+              // If `showPassword=false` => secure else NOT secure
+              secureTextEntry={!showPassword}
+              value={state.password_reapeat.value}
+              onChangeText={(text) =>
+                dispatch({
+                  key: "password_reapeat",
+                  value_key: "value",
+                  value: text,
+                })
+              }
+              error={state.password.value !== state.password_reapeat.value}
+              keyboardType={showPassword ? "visible-password" : "default"}
+              returnKeyType="next"
+              right={
+                <TextInput.Icon
+                  icon="eye"
+                  onPress={() => setShowPassword((value) => !value)}
+                />
+              }
+            />
+          </View>
+
+          {/* Email input */}
+          <View style={styles.inputContainer}>
+            <Icon source="email" size={ICON_SIZE} />
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              label="ایمیل"
+              value={state.email.value}
+              onChangeText={(text) =>
+                dispatch({
+                  key: "email",
+                  value_key: "value",
+                  value: text,
+                })
+              }
+              error={state.email.error}
+              returnKeyType="yahoo"
+            />
+          </View>
 
           {/* Submit btn */}
           <Button
             onPress={Submit}
             mode="contained-tonal"
             style={styles.btn}
-            disabled={disabledBtn || username.length < 4 || password.length < 8}
+            disabled={
+              disabledBtn ||
+              state.username.value.length < 4 ||
+              state.password.value.length < 8 ||
+              state.password_reapeat.value !== state.password.value
+            }
             loading={disabledBtn}
           >
             ساخت حساب کاربری جدید
@@ -165,12 +253,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     justifyContent: "center",
   },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   cardTitle: {
     alignSelf: "center",
     marginVertical: 5,
   },
   textInput: {
     marginVertical: 5,
+    flex: 1,
+    marginLeft: 10,
   },
   btn: {
     marginTop: 35,
