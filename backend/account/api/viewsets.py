@@ -109,8 +109,7 @@ class UserViewSet(ModelViewSet):
             mail_subject, message, to=[email]
         )
         email.send()
-        headers = self.get_success_headers()
-        return Response(data={'message': _('Account created. Check your email to activate it.')}, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(data={'message': _('Account created. Check your email to activate it.')}, status=status.HTTP_201_CREATED)
 
     @action(methods=['POST'], detail=False)
     def activate(self, request):

@@ -20,6 +20,8 @@ class UserSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
 
 
 class AccountCreationSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+
 
     class Meta:
         model = User

@@ -110,3 +110,6 @@ class UserTestCase(APILiveServerTestCase):
                          f"User can not refresh token. {res.json()}")
         self.assertNotEqual(res_invalid.status_code, status.HTTP_200_OK,
                             f"User can refresh with fake token. {res.json()}")
+
+
+# TODO: Add test for serializers
