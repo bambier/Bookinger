@@ -1,24 +1,27 @@
+import IconInput from "@/components/IconInput";
 import urls from "@/constants/urls";
 import requests from "@/utils/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosError, AxiosResponse } from "axios";
+import * as Network from "expo-network";
 import { router } from "expo-router";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import {
+  Alert,
   GestureResponderEvent,
   Image,
   StyleSheet,
   ToastAndroid,
   View,
 } from "react-native";
-import { Button, Card, Icon, Text, TextInput } from "react-native-paper";
+import { Button, Card, Text, TextInput } from "react-native-paper";
 
 // Codes
 
 // Reducer for state
 function reducer(
   state: any,
-  action: { key: string; value_key: string; value: string }
+  action: { key: string; value_key: string; value: string | boolean }
 ) {
   return {
     ...state,
@@ -53,6 +56,16 @@ export default function Register() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [disabledBtn, setDisabledBtn] = useState(false);
+  // FIXME: Fix type cheking with a mysterious way
+  // BUG: IDK why does this happens
+  // @ts-ignore
+  const usernameRef = useRef<TextInput>(null);
+  // @ts-ignore
+  const passwordRef = useRef<TextInput>(null);
+  // @ts-ignore
+  const passwordReapeatRef = useRef<TextInput>(null);
+  // @ts-ignore
+  const emailRef = useRef<TextInput>(null);
 
   useEffect(() => {
     AsyncStorage.getItem("refresh-token")
@@ -69,7 +82,6 @@ export default function Register() {
       });
   }, []);
 
-  // FIXME: Fix URL and data
   function Submit(event: GestureResponderEvent) {
     event.preventDefault();
     setDisabledBtn(true);
@@ -79,44 +91,63 @@ export default function Register() {
     if (state.username.value.length < 4) {
       dispatch({ key: "username", value_key: "error", value: true });
     }
+    if (!isValidEmail(state.email.value)) {
+      dispatch({ key: "email", value_key: "error", value: true });
+    }
 
-    if (state.password.length >= 8 && state.username.length >= 4) {
-      requests
-        .post(urls.account.user.login, {
-          username: state.username,
-          password: state.password,
-        })
-        .then((response: AxiosResponse) => {
-          if (response.status === 200 && typeof response.data === "object") {
-            // logged in
-            console.log(response.data);
-            AsyncStorage.setItem("access-token", response.data.access);
-            AsyncStorage.setItem(
-              "refresh-token",
-              response.data.refresh
-            ).finally(() => router.replace("/"));
-          } else {
-            ToastAndroid.show("خطای ناشناخته", ToastAndroid.SHORT);
-          }
-        })
-        .catch((error: AxiosError) => {
-          if (error.code === "ERR_CANCELED") {
-            return;
-          } else if (
-            error.response?.status === 401 &&
-            typeof error.response.data === "object"
-          ) {
-            ToastAndroid.show(
-              "نام کاربری یا گذرواژه نادرست است",
-              ToastAndroid.LONG
-            );
-          } else {
-            ToastAndroid.show("خطای ناشناخته", ToastAndroid.SHORT);
-          }
-        })
-        .finally(() => {
-          setDisabledBtn(false);
-        });
+    if (
+      state.username.value.length >= 4 &&
+      state.password.value.length >= 8 &&
+      isValidEmail(state.email.value)
+    ) {
+      Network.getNetworkStateAsync().then((result) => {
+        if (result.isConnected && result.isInternetReachable) {
+          requests
+            .post(urls.account.user.root, {
+              username: state.username.value,
+              password: state.password.value,
+              email: state.email.value,
+            })
+            .then((response: AxiosResponse) => {
+              if (
+                response.status === 201 &&
+                typeof response.data === "object"
+              ) {
+                // logged in
+                Alert.alert("ساخت حساب کاربری", response.data["message"], [
+                  {
+                    text: "تایید",
+                    onPress: (e) => router.back(),
+                  },
+                ]);
+              } else {
+                ToastAndroid.show("عدم اتصال به اینترنت", ToastAndroid.SHORT);
+              }
+            })
+            .catch((error: AxiosError) => {
+              if (error.code === "ERR_CANCELED") {
+                return;
+              } else if (
+                error.response?.status === 400 &&
+                typeof error.response.data === "object"
+              ) {
+                ToastAndroid.show(
+                  JSON.stringify(error.response.data),
+                  ToastAndroid.LONG
+                );
+              } else if (error.code === "ERR_NETWORK") {
+                ToastAndroid.show("عدم اتصال به اینترنت", ToastAndroid.SHORT);
+              } else {
+                ToastAndroid.show("خطای ناشناخته", ToastAndroid.SHORT);
+              }
+            })
+            .finally(() => {
+              setDisabledBtn(false);
+            });
+        } else {
+          ToastAndroid.show("عدم اتصال به اینترنت", ToastAndroid.LONG);
+        }
+      });
     }
   }
 
@@ -133,94 +164,88 @@ export default function Register() {
           </Text>
 
           {/* Username input */}
-          <View style={styles.inputContainer}>
-            <Icon source="account" size={ICON_SIZE} />
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              label="نام کاربری"
-              value={state.username.value}
-              onChangeText={(text) =>
-                dispatch({ key: "username", value_key: "value", value: text })
-              }
-              error={state.username.error}
-              returnKeyType="next"
-            />
-          </View>
+
+          <IconInput
+            icon="account"
+            label="نام کاربری"
+            value={state.username.value}
+            onChangeText={(text: string) =>
+              dispatch({ key: "username", value_key: "value", value: text })
+            }
+            error={state.username.error}
+            innerRef={usernameRef}
+            onSubmitEditing={(e: any) => passwordRef.current?.focus()}
+            returnKeyType="next"
+          />
 
           {/* Password input */}
-          <View style={styles.inputContainer}>
-            <Icon source="form-textbox-password" size={ICON_SIZE} />
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              label="گذرواژه"
-              // If `showPassword=false` => secure else NOT secure
-              secureTextEntry={!showPassword}
-              value={state.password.value}
-              onChangeText={(text) =>
-                dispatch({ key: "password", value_key: "value", value: text })
-              }
-              error={state.password.error}
-              keyboardType={showPassword ? "visible-password" : "default"}
-              returnKeyType="next"
-              right={
-                <TextInput.Icon
-                  icon="eye"
-                  onPress={() => setShowPassword((value) => !value)}
-                />
-              }
-            />
-          </View>
+          <IconInput
+            icon="form-textbox-password"
+            label="گذرواژه"
+            // If `showPassword=false` => secure else NOT secure
+            secureTextEntry={!showPassword}
+            value={state.password.value}
+            onChangeText={(text: string) =>
+              dispatch({ key: "password", value_key: "value", value: text })
+            }
+            error={state.password.error}
+            keyboardType={showPassword ? "visible-password" : "default"}
+            innerRef={passwordRef}
+            onSubmitEditing={(e: any) => passwordReapeatRef.current?.focus()}
+            returnKeyType="next"
+            right={
+              <TextInput.Icon
+                icon="eye"
+                onPress={() => setShowPassword((value) => !value)}
+              />
+            }
+          />
 
           {/* Password repeat input */}
-          <View style={styles.inputContainer}>
-            <Icon source="repeat" size={ICON_SIZE} />
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              label="تکرار گذرواژه"
-              // If `showPassword=false` => secure else NOT secure
-              secureTextEntry={!showPassword}
-              value={state.password_reapeat.value}
-              onChangeText={(text) =>
-                dispatch({
-                  key: "password_reapeat",
-                  value_key: "value",
-                  value: text,
-                })
-              }
-              error={state.password.value !== state.password_reapeat.value}
-              keyboardType={showPassword ? "visible-password" : "default"}
-              returnKeyType="next"
-              right={
-                <TextInput.Icon
-                  icon="eye"
-                  onPress={() => setShowPassword((value) => !value)}
-                />
-              }
-            />
-          </View>
+          <IconInput
+            icon="repeat"
+            label="تکرار گذرواژه"
+            // If `showPassword=false` => secure else NOT secure
+            secureTextEntry={!showPassword}
+            value={state.password_reapeat.value}
+            onChangeText={(text: string) =>
+              dispatch({
+                key: "password_reapeat",
+                value_key: "value",
+                value: text,
+              })
+            }
+            error={state.password.value !== state.password_reapeat.value}
+            keyboardType={showPassword ? "visible-password" : "default"}
+            innerRef={passwordReapeatRef}
+            onSubmitEditing={(e: any) => emailRef.current?.focus()}
+            returnKeyType="next"
+            right={
+              <TextInput.Icon
+                icon="eye"
+                onPress={() => setShowPassword((value) => !value)}
+              />
+            }
+          />
 
           {/* Email input */}
-          <View style={styles.inputContainer}>
-            <Icon source="email" size={ICON_SIZE} />
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              label="ایمیل"
-              value={state.email.value}
-              onChangeText={(text) =>
-                dispatch({
-                  key: "email",
-                  value_key: "value",
-                  value: text,
-                })
-              }
-              error={state.email.error}
-              returnKeyType="yahoo"
-            />
-          </View>
+          <IconInput
+            icon="email"
+            label="ایمیل"
+            value={state.email.value}
+            onChangeText={(text: any) =>
+              dispatch({
+                key: "email",
+                value_key: "value",
+                value: text,
+              })
+            }
+            error={state.email.error}
+            returnKeyType="done"
+            keyboardType="email-address"
+            inputMode="email"
+            innerRef={emailRef}
+          />
 
           {/* Submit btn */}
           <Button
@@ -231,13 +256,13 @@ export default function Register() {
               disabledBtn ||
               state.username.value.length < 4 ||
               state.password.value.length < 8 ||
-              state.password_reapeat.value !== state.password.value
+              state.password_reapeat.value !== state.password.value ||
+              !isValidEmail(state.email.value)
             }
             loading={disabledBtn}
           >
             ساخت حساب کاربری جدید
           </Button>
-
           <Button style={styles.btn} onPress={(e) => router.back()}>
             ورود به حساب کاربری
           </Button>
@@ -275,3 +300,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
+
+function isValidEmail(email: string): boolean {
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return regex.test(email);
+}
