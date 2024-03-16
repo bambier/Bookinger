@@ -13,7 +13,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -24,6 +26,9 @@
       },
       "package": "com.bookinger.reserve",
       "versionCode": 1
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
