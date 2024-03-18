@@ -1,5 +1,6 @@
 import IconInput from "@/components/IconInput";
 import urls from "@/constants/urls";
+import isValidEmail from "@/utils/EmailValidator";
 import requests from "@/utils/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosError, AxiosResponse } from "axios";
@@ -71,11 +72,12 @@ export default function Register() {
     AsyncStorage.getItem("refresh-token")
       .then((value) => {
         if (value !== null) {
-          router.replace("/");
+          router.replace("/private/Home");
         }
       })
       .catch((error) => {
         console.error(error);
+        return;
       })
       .finally(() => {
         setIsLoaded(true);
@@ -300,8 +302,3 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
-
-function isValidEmail(email: string): boolean {
-  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return regex.test(email);
-}

@@ -20,8 +20,8 @@ export const unstable_settings = {
   // Ensure any route can link back to `/`
   initialRouteName: "index",
 
-  auth: {
-    initialRouteName: "Login",
+  private: {
+    initialRouteName: "Home",
   },
 };
 
@@ -53,10 +53,15 @@ export default function RootLayout() {
     <ThemeProvider value={Theme[colorScheme].navigation}>
       <PaperProvider theme={Theme[colorScheme].md}>
         <SafeAreaView style={{ flex: 1, margin: 0, padding: 0 }}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="auth" />
+          <Stack
+            screenOptions={{ headerShown: false }}
+            initialRouteName="index"
+          >
+            <Stack.Screen name="Register" />
+            <Stack.Screen name="private" />
           </Stack>
         </SafeAreaView>
+
         <StatusBar
           backgroundColor={colorScheme === "dark" ? "#1F222A" : "#F6FAFD"}
           style="auto"

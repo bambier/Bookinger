@@ -1,3 +1,10 @@
+/**
+ * Decodes a JWT (JSON Web Token) and returns its header, payload, and signature.
+ * Returns an object with the decoded header, payload, and signature, or a default object if the token is invalid.
+ *
+ * @param {string} raw_token - The raw JWT to decode.
+ * @returns {{header: object, payload: object, signature: string}} An object containing the decoded header, payload, and signature of the JWT.
+ */
 export default function jwt_decode(raw_token: string) {
   const token = raw_token.split(".");
   try {
