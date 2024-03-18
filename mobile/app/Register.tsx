@@ -1,6 +1,7 @@
 import IconInput from "@/components/IconInput";
 import urls from "@/constants/urls";
 import isValidEmail from "@/utils/EmailValidator";
+import IsPasswordValid from "@/utils/passwordValidator";
 import requests from "@/utils/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosError, AxiosResponse } from "axios";
@@ -87,19 +88,20 @@ export default function Register() {
   function Submit(event: GestureResponderEvent) {
     event.preventDefault();
     setDisabledBtn(true);
-    if (state.password.value.length < 8) {
-      dispatch({ key: "password", value_key: "error", value: true });
-    }
+
     if (state.username.value.length < 4) {
       dispatch({ key: "username", value_key: "error", value: true });
     }
     if (!isValidEmail(state.email.value)) {
       dispatch({ key: "email", value_key: "error", value: true });
     }
+    if (!IsPasswordValid(state.password.value)) {
+      dispatch({ key: "password", value_key: "error", value: true });
+    }
 
     if (
       state.username.value.length >= 4 &&
-      state.password.value.length >= 8 &&
+      IsPasswordValid(state.password.value) &&
       isValidEmail(state.email.value)
     ) {
       Network.getNetworkStateAsync().then((result) => {
@@ -138,6 +140,7 @@ export default function Register() {
                   ToastAndroid.LONG
                 );
               } else if (error.code === "ERR_NETWORK") {
+                console.log("SSSSSSSSsss");
                 ToastAndroid.show("عدم اتصال به اینترنت", ToastAndroid.SHORT);
               } else {
                 ToastAndroid.show("خطای ناشناخته", ToastAndroid.SHORT);
@@ -150,6 +153,8 @@ export default function Register() {
           ToastAndroid.show("عدم اتصال به اینترنت", ToastAndroid.LONG);
         }
       });
+    } else {
+      setDisabledBtn(false);
     }
   }
 
@@ -190,7 +195,7 @@ export default function Register() {
             onChangeText={(text: string) =>
               dispatch({ key: "password", value_key: "value", value: text })
             }
-            error={state.password.error}
+            error={state.password.erroe}
             keyboardType={showPassword ? "visible-password" : "default"}
             innerRef={passwordRef}
             onSubmitEditing={(e: any) => passwordReapeatRef.current?.focus()}
@@ -242,7 +247,7 @@ export default function Register() {
                 value: text,
               })
             }
-            error={state.email.error}
+            error={!isValidEmail(state.email.value)}
             returnKeyType="done"
             keyboardType="email-address"
             inputMode="email"
@@ -259,7 +264,7 @@ export default function Register() {
               state.username.value.length < 4 ||
               state.password.value.length < 8 ||
               state.password_reapeat.value !== state.password.value ||
-              !isValidEmail(state.email.value)
+              state.email.error
             }
             loading={disabledBtn}
           >

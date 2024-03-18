@@ -1,6 +1,7 @@
 import IconInput from "@/components/IconInput";
 import urls from "@/constants/urls";
 import isValidEmail from "@/utils/EmailValidator";
+import IsPasswordValid from "@/utils/passwordValidator";
 import requests from "@/utils/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosError, AxiosResponse } from "axios";
@@ -59,19 +60,20 @@ export default function Login() {
   function Submit(event: GestureResponderEvent) {
     event.preventDefault();
     setDisabledBtn(true);
-    if (state.password.value.length < 8) {
-      dispatch({ key: "password", value_key: "error", value: true });
-    }
+
     if (state.username.value.length < 4) {
       dispatch({ key: "username", value_key: "error", value: true });
     }
     if (!isValidEmail(state.email.value)) {
       dispatch({ key: "email", value_key: "error", value: true });
     }
+    if (!IsPasswordValid(state.password.value)) {
+      dispatch({ key: "password", value_key: "error", value: true });
+    }
 
     if (
       state.username.value.length >= 4 &&
-      state.password.value.length >= 8 &&
+      IsPasswordValid(state.password.value) &&
       isValidEmail(state.email.value)
     ) {
       requests
@@ -119,6 +121,8 @@ export default function Login() {
         .finally(() => {
           setDisabledBtn(false);
         });
+    } else {
+      setDisabledBtn(false);
     }
   }
 
@@ -162,8 +166,7 @@ export default function Login() {
             error={state.password.error}
             keyboardType={showPassword ? "visible-password" : "default"}
             innerRef={passwordRef}
-            onSubmitEditing={(e: any) => passwordReapeatRef.current?.focus()}
-            returnKeyType="next"
+            returnKeyType="done"
             right={
               <TextInput.Icon
                 icon="eye"
@@ -180,7 +183,7 @@ export default function Login() {
             disabled={
               disabledBtn ||
               state.username.length < 4 ||
-              state.password.length < 8
+              state.password.value.length < 8
             }
             loading={disabledBtn}
           >
